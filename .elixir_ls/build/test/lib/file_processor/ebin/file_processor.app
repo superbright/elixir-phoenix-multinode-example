@@ -1,0 +1,10 @@
+{application,file_processor,
+             [{optional_applications,[]},
+              {applications,[kernel,stdlib,elixir,logger,phoenix_pubsub]},
+              {description,"file_processor"},
+              {modules,['Elixir.FileProcessor.Application',
+                        'Elixir.FileProcessor.Reader',
+                        'Elixir.FileProcessor.Writer']},
+              {registered,[]},
+              {vsn,"0.1.0"},
+              {mod,{'Elixir.FileProcessor.Application',[]}}]}.
