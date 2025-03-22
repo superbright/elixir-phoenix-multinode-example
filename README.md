@@ -1,6 +1,7 @@
 # Distributed File Processor
 
 A distributed Elixir application demonstrating inter-node communication using Phoenix PubSub. The application consists of two nodes:
+
 - Reader node: Reads a text file line by line every second
 - Writer node: Receives lines from the reader and writes them to an output file
 
@@ -13,12 +14,14 @@ A distributed Elixir application demonstrating inter-node communication using Ph
 ## Installation
 
 1. Clone the repository:
+
 ```bash
 git clone [repository-url]
 cd file_processor
 ```
 
 2. Install dependencies:
+
 ```bash
 mix local.hex --force
 mix deps.get
@@ -27,6 +30,7 @@ mix deps.get
 ## Running the Application
 
 1. Create an input file (`input.txt`) with some sample content:
+
 ```bash
 echo "Line 1
 Line 2
@@ -36,6 +40,7 @@ Line 5" > input.txt
 ```
 
 2. Start the reader node in first terminal:
+
 ```bash
 iex --name reader@127.0.0.1 -S mix
 
@@ -45,16 +50,20 @@ iex(2)> FileProcessor.Reader.start_reading("input.txt")
 ```
 
 3. Start the writer node in second terminal:
+
 ```bash
 iex --name writer@127.0.0.1 -S mix
 
-# In the IEx shell:
+# In the IEx shell (these should run automatically as they have been moved to file: ".iex.exs"):
 iex(1)> FileProcessor.Writer.start_link([])
 iex(2)> Node.connect(:"reader@127.0.0.1")
 iex(3)> FileProcessor.Writer.set_output_file("output.txt")
 ```
+
 ## Run with Docker
+
 - to build, run
+
 ```bash
 docker build -t elixir-pubsub . --output type=docker
 ```
@@ -64,6 +73,7 @@ run with (where 192.168.0.1 is the ip for the reader)
 ```bash
 docker run --cap-add NET_ADMIN --cap-add SYS_MODULE --network=host --privileged -it --rm elixir-pubsub reader@192.168.0.1 -S mix
 ```
+
 or with the below (default IP set to 127.0.0.1)
 
 ```bash
@@ -75,6 +85,7 @@ docker run --cap-add NET_ADMIN --cap-add SYS_MODULE --network=host --privileged 
 ### Architecture
 
 The application uses:
+
 - Phoenix.PubSub for inter-node communication
 - GenServer for managing state and process behavior
 - File module for file I/O operations
@@ -83,6 +94,7 @@ The application uses:
 ### Components
 
 1. **Reader Node (FileProcessor.Reader)**
+
    - Reads input file line by line every second
    - Removes read line from input file
    - Broadcasts each line using Phoenix.PubSub
@@ -107,6 +119,7 @@ The application uses:
 ### Monitoring
 
 Both nodes log their operations:
+
 - Reader logs each line read
 - Writer logs each line written
 - Error conditions are logged
@@ -114,12 +127,14 @@ Both nodes log their operations:
 ## Stopping the Application
 
 To stop either node:
+
 - Type `Ctrl+C` twice in the IEx shell
 - Or execute `System.halt()` in the shell
 
 ## Error Handling
 
 The application handles:
+
 - Empty input files
 - Missing input/output files
 - Network disconnections
@@ -128,6 +143,7 @@ The application handles:
 ## Development
 
 ### Project Structure
+
 ```
 file_processor/
 ├── lib/

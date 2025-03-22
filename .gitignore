@@ -30,4 +30,4 @@ phoenix-*.ez
 # this depending on your deployment strategy.
 /priv/static/
 
-fly.io
+fly.io/**
