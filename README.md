@@ -53,6 +53,22 @@ iex(1)> FileProcessor.Writer.start_link([])
 iex(2)> Node.connect(:"reader@127.0.0.1")
 iex(3)> FileProcessor.Writer.set_output_file("output.txt")
 ```
+## Run with Docker
+- to build, run
+```bash
+docker build -t elixir-pubsub . --output type=docker
+```
+
+run with (where 192.168.0.1 is the ip for the reader)
+
+```bash
+docker run --cap-add NET_ADMIN --cap-add SYS_MODULE --network=host --privileged -it --rm elixir-pubsub reader@192.168.0.1 -S mix
+```
+or with the below (default IP set to 127.0.0.1)
+
+```bash
+docker run --cap-add NET_ADMIN --cap-add SYS_MODULE --network=host --privileged -it --rm elixir-pubsub
+```
 
 ## How It Works
 
