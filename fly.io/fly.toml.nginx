@@ -1,0 +1,11 @@
+# fly.toml
+app = "elixirapp"
+primary_region = "fra"
+network = "pubsub"
+
+[build]
+  image = "nginx:latest" # Example Docker image
+
+[env]
+  PORT = "8080"
+

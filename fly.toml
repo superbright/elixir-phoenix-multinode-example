@@ -1,0 +1,11 @@
+# fly.toml
+app = "elixirapp"
+primary_region = "fra"
+network = "pubsub"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  PORT = "4000"
+
