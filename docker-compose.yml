@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  writer:
+    build: .
+    hostname: writer.local
+    environment:
+      - NODE_NAME=writer@writer.local
+      - NODE_HOST=writer.local
+      - CLUSTER_HOSTS=reader@reader.local,writer@writer.local
+    volumes:
+      - ./output.txt:/app/output.txt
+    networks:
+      elixir_net:
+        aliases:
+          - writer.local
+
+  reader:
+    build: .
+    hostname: reader.local
+    environment:
+      - NODE_NAME=reader@reader.local
+      - NODE_HOST=reader.local
+      - CLUSTER_HOSTS=reader@reader.local,writer@writer.local
+    volumes:
+      - ./output.txt:/app/output.txt
+    networks:
+      elixir_net:
+        aliases:
+          - reader.local
+
+networks:
+  elixir_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16

@@ -1,55 +1,56 @@
 # Distributed File Processor
 
-A distributed Elixir application demonstrating inter-node communication using Phoenix PubSub. The application consists of two nodes:
+A distributed Elixir application demonstrating inter-node communication using libcluster. The application consists of two nodes:
 
-- Reader node: Reads a text file line by line every second
-- Writer node: Receives lines from the reader and writes them to an output file
+- Reader node: Reads content from the distributed state
+- Writer node: Writes content to the distributed state
 
 ## Prerequisites
 
-- Elixir 1.14 or later
-- Erlang/OTP 24 or later
-- macOS (for the provided instructions)
-
-## Installation
-
-1. Clone the repository:
-
-```bash
-git clone [repository-url]
-cd file_processor
-```
-
-2. Install dependencies:
-
-```bash
-mix local.hex --force
-mix deps.get
-```
+- Docker
+- Docker Compose
 
 ## Running the Application
 
-1. Create an input file (`input.txt`) with some sample content:
+1. Build and start the containers:
 
 ```bash
-echo "Line 1
-Line 2
-Line 3
-Line 4
-Line 5" > input.txt
+docker-compose up --build
 ```
 
-2. Start the reader node in first terminal:
+This will start both the reader and writer nodes, which will automatically connect to each other using libcluster.
+
+## Testing the System
+
+1. Connect to the writer node:
 
 ```bash
-iex --name reader@127.0.0.1 -S mix
-
-# In the IEx shell:
-iex(1)> FileProcessor.Reader.start_link([])
-iex(2)> FileProcessor.Reader.start_reading("input.txt")
+docker exec -it elixir-phoenix-multinode-example_writer_1 iex --name test@writer --cookie secret --remsh writer@writer
 ```
 
-3. Start the writer node in second terminal:
+2. Write some content:
+
+```elixir
+iex(1)> FileProcessor.Writer.write("Hello, distributed world!")
+```
+
+3. Connect to the reader node:
+
+```bash
+docker exec -it elixir-phoenix-multinode-example_reader_1 iex --name test@reader --cookie secret --remsh reader@reader
+```
+
+4. Read the content:
+
+```elixir
+iex(1)> FileProcessor.Reader.read()
+```
+
+## Architecture
+
+The application uses libcluster for node discovery and communication. The nodes are configured to use the Gossip strategy for clustering. The state is managed by a distributed GenServer that ensures consistency across the cluster.
+
+The system is containerized using Docker, with separate containers for the reader and writer nodes. They share a volume for the output file and communicate over a Docker network.
 
 ```bash
 iex --name writer@127.0.0.1 -S mix

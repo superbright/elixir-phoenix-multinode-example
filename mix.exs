@@ -20,7 +20,7 @@ defmodule FileProcessor.MixProject do
 
   defp deps do
     [
-      {:phoenix_pubsub, "~> 2.1"}
+      {:libcluster, "~> 3.3"}
     ]
   end
 end
