@@ -24,6 +24,7 @@ services:
       - CLUSTER_HOSTS=reader@reader.local,writer@writer.local
     volumes:
       - ./output.txt:/app/output.txt
+      - ./input.txt:/app/input.txt
     networks:
       elixir_net:
         aliases:

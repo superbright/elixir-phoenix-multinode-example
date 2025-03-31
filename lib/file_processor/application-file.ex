@@ -21,7 +21,8 @@ defmodule FileProcessor.Application do
     children = if writer_node?() do
       children ++ [{FileProcessor.StateManager, []}]
     else
-      children
+      # On reader node, add the Reader process
+      children ++ [{FileProcessor.Reader, []}]
     end
 
     opts = [strategy: :one_for_one, name: FileProcessor.Supervisor]
